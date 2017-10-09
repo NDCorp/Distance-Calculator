@@ -10,10 +10,10 @@ namespace Distance_Calculator
     {
         private decimal carSpeed;
         private decimal nbrHours;
-        private bool errSpeed, errNbrHours;
-        private List<MDist> roadDist;
-        private string FOLDER, FILE_NAME;
         private string msgInfo;
+        private List<MDist> roadDist;
+        private bool errSpeed, errNbrHours;
+        private string FOLDER, FILE_NAME;
 
         //constructor
         public VMDistance()
