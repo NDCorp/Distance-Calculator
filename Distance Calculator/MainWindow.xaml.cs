@@ -9,7 +9,6 @@ namespace Distance_Calculator
     public partial class MainWindow : Window
     {
         VMDistance VM;
-        private string msgErr;
 
         public MainWindow()
         {
@@ -20,8 +19,8 @@ namespace Distance_Calculator
 
         private void btnCalculate_Click(object sender, RoutedEventArgs e)
         {
-            VM.CalculateDistance(ref msgErr);
-            VM.WriteFile(msgErr);
+            VM.CalculateDistance();
+            VM.WriteFile();
         }
 
         //Lock the minus symbol

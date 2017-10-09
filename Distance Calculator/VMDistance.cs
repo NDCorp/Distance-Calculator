@@ -93,7 +93,7 @@ namespace Distance_Calculator
 
         #region CalculateDistance
         //Calculate the Distance
-        public void CalculateDistance(ref string sysMsg)
+        public void CalculateDistance()
         {
             MDist nDist;
             int nHours;
@@ -117,23 +117,21 @@ namespace Distance_Calculator
                     }
 
                     ListDist = roadDist;
-                    sysMsg = "";
+                    msgInfo = "";
                 }
                 else
-                    sysMsg = "The distance is 0.";
+                    msgInfo = "The distance is 0.";
             }
             else
-            {
-                sysMsg = "Please write valid number(s). Decimals are accepted.";
-            }
+                msgInfo = "Please write valid number(s). Decimals are accepted.";
 
-            Message = sysMsg; //the label, to show the user a message
+            Message = msgInfo; //the label, to show the user a message
         }
         #endregion
 
         #region WriteFile
         //Write content
-        public void WriteFile(string outputText)
+        public void WriteFile()
         {
             //string outputText = "";
             string location = System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
@@ -143,22 +141,24 @@ namespace Distance_Calculator
             string fullName = Path.Combine(fileLocation, FILE_NAME);
 
             //If empty, not error: write the distance
-            if (string.IsNullOrEmpty(outputText))
+            if (string.IsNullOrEmpty(msgInfo))
             {
-                outputText = "\nSpeed\t Time and Distance\n" +
-                             "======\t====================\n";
+                msgInfo = "\nSpeed\t\tTime and Distance\n" +
+                             "======\t=========================";
                 for (int i = 0; i < roadDist.Count; i++)
                 {
-                    outputText += "\n" + carSpeed.ToString() + "\t\t" + roadDist[i];
+                    msgInfo += "\n" + carSpeed.ToString() + "\t\t" + roadDist[i];
                 }
-                outputText += "\n=================================";
+                msgInfo += "\n=================================";
             }
             else
-                outputText = "*************************************************\n" +
-                             outputText +
-                             "\n*************************************************";    //If not empty, error: get the message to write in the file
-
-            File.WriteAllText(fullName, outputText);    //create/write the file if already exists
+            { 
+                ListDist = null;
+                msgInfo = "*************************************************\n" +
+                          msgInfo +
+                          "\n*************************************************";    //If not empty, error: get the message to write in the file
+            }
+            File.WriteAllText(fullName, msgInfo);    //create/write the file if already exists
         }
         #endregion
 
