@@ -2,9 +2,6 @@
 {
     class MDist
     {
-        //public decimal distance;
-        //public string distName;
-
         public MDist(string name, decimal dist)
         {
             DistName = name;
