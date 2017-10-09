@@ -2,90 +2,166 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Distance_Calculator
 {
     class VMDistance : INotifyPropertyChanged
     {
-        private decimal carSpeed, nbrHours;
+        private decimal carSpeed;
+        private decimal nbrHours;
+        private bool errSpeed, errNbrHours;
         private List<MDist> roadDist;
         private string FOLDER, FILE_NAME;
+        private string msgInfo;
 
         //constructor
         public VMDistance()
         {
-            roadDist = new List<MDist>();
             FOLDER = "PROG8010";
             FILE_NAME = "as05-output.txt";
+            errSpeed = true;
+            errNbrHours = true;
         }
 
-        public decimal Speed
+        #region public members
+        //lblSpeed
+        public string Speed
         {
-            get { return carSpeed; }
+            get
+            {
+                return carSpeed.ToString();
+            }
             set
-            {   //if (decimal.TryParse(value, out carSpeed))
-                //        inputErr = false;
-                //    else
-                //        inputErr = true;
-                carSpeed = value;
+            {
+                if (decimal.TryParse(value, out carSpeed))
+                    errSpeed = false;   //false if no errors
+                else
+                    errSpeed = true;
+
                 OnPropertyChanged();
             }
         }
 
-        public decimal Hours
+        //lblTime
+        public string Hours
         {
-            get { return nbrHours; }
-            set { nbrHours = value; OnPropertyChanged(); }
-        }
-
-        public List<MDist> ListDist
-        {
-            get { return roadDist; }
-            set { roadDist = value; OnPropertyChanged(); }
-        }
-
-        public void CalculateDistance()
-        {
-            int nHours = (int)Math.Round(nbrHours);     //convert and round to int
-            MDist nDist;
-
-            roadDist.Clear();
-            ListDist = new List<MDist>();
-
-            //Create an instance of this object using parameters, Calculate, and Add the object to the list
-            for (int i = 1; i <= nHours; i++)   //***** 2hours doesn't work
+            get
             {
-                nDist = new MDist(string.Concat("After hour ", i.ToString()), carSpeed * i);
-                roadDist.Add(nDist);    //add an object MDist to the list
+                return nbrHours.ToString();
+            }
+            set
+            {
+                if (decimal.TryParse(value, out nbrHours))
+                    errNbrHours = false;    //false if no errors
+                else
+                    errNbrHours = true;
+
+                OnPropertyChanged();
             }
         }
 
-        public void WriteFile()
+        //lbxDistance
+        public List<MDist> ListDist
         {
+            get
+            {
+                return roadDist;
+            }
+            set
+            {
+                roadDist = value;
+                OnPropertyChanged();
+            }
+        }
+
+        //lblMessage
+        public string Message
+        {
+            get
+            {
+                return msgInfo;
+            }
+
+            set
+            {
+                msgInfo = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
+
+        #region CalculateDistance
+        //Calculate the Distance
+        public void CalculateDistance(ref string sysMsg)
+        {
+            MDist nDist;
+            int nHours;
+            decimal distance;
+
+            distance = carSpeed * nbrHours;
+            roadDist = new List<MDist>();
+
+            if (!errSpeed && !errNbrHours)
+            {
+                if (distance != 0)
+                {
+                    nHours = (int)Math.Round(nbrHours);     //convert and round to int
+
+                    //Create an instance of this object using parameters, Calculate, and Add the object to the list
+                    for (int i = 1; i <= nHours; i++)
+                    {
+                        nDist = new MDist(string.Concat("After hour ", i.ToString()), carSpeed * i);
+                        roadDist.Add(nDist);                //add an object MDist to the list
+                        nDist = null;
+                    }
+
+                    ListDist = roadDist;
+                    sysMsg = "";
+                }
+                else
+                    sysMsg = "The distance is 0.";
+            }
+            else
+            {
+                sysMsg = "Please write valid number(s). Decimals are accepted.";
+            }
+
+            Message = sysMsg; //the label, to show the user a message
+        }
+        #endregion
+
+        #region WriteFile
+        //Write content
+        public void WriteFile(string outputText)
+        {
+            //string outputText = "";
             string location = System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string fileLocation = Path.Combine(location, FOLDER);
             Directory.CreateDirectory(fileLocation);
 
             string fullName = Path.Combine(fileLocation, FILE_NAME);
-            File.WriteAllText(fullName, "");    //create or clear the file if already exists
-            StreamWriter strWrite = File.AppendText(fullName);
 
-            strWrite.WriteLine("\nSpeed\t\t Time and Distance");
-            strWrite.Write("======\t\t====================\n");
-            for (int i = 0; i < roadDist.Count; i++)
+            //If empty, not error: write the distance
+            if (string.IsNullOrEmpty(outputText))
             {
-                strWrite.Write(carSpeed.ToString());
-                strWrite.Write("\t\t");
-                strWrite.WriteLine(roadDist[i]);
+                outputText = "\nSpeed\t Time and Distance\n" +
+                             "======\t====================\n";
+                for (int i = 0; i < roadDist.Count; i++)
+                {
+                    outputText += "\n" + carSpeed.ToString() + "\t\t" + roadDist[i];
+                }
+                outputText += "\n=================================";
             }
+            else
+                outputText = "*************************************************\n" +
+                             outputText +
+                             "\n*************************************************";    //If not empty, error: get the message to write in the file
 
-            strWrite.Write("=================================");
-            strWrite.Close();
+            File.WriteAllText(fullName, outputText);    //create/write the file if already exists
         }
+        #endregion
+
         #region PropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName]string caller = null)

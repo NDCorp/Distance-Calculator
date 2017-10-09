@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Distance_Calculator
 {
@@ -21,6 +9,7 @@ namespace Distance_Calculator
     public partial class MainWindow : Window
     {
         VMDistance VM;
+        private string msgErr;
 
         public MainWindow()
         {
@@ -31,8 +20,21 @@ namespace Distance_Calculator
 
         private void btnCalculate_Click(object sender, RoutedEventArgs e)
         {
-            VM.CalculateDistance();
-            VM.WriteFile();
+            VM.CalculateDistance(ref msgErr);
+            VM.WriteFile(msgErr);
+        }
+
+        //Lock the minus symbol
+        private void txtSpeed_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.OemMinus || e.Key == Key.Subtract)
+                e.Handled = true;
+        }
+
+        private void txtTime_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.OemMinus || e.Key == Key.Subtract)
+                e.Handled = true;
         }
     }
 }

@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Distance_Calculator"
         mc:Ignorable="d"
-        Title="Distance Calculator" Height="350" Width="525">
-    <!--   <Viewbox>-->
+        Title="Distance Calculator" Height="434.517" Width="525" ResizeMode="noresize">
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -18,16 +18,17 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="3*"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Column="1"  Margin="5">
+        <StackPanel Grid.Column="1"  Margin="5 2">
             <Label Name="lblSpeed" Content="Enter Speed:"/>
-            <TextBox Name="txtSpeed" Text="{Binding Speed, Mode=OneWayToSource}"/>
+            <TextBox Name="txtSpeed" Text="{Binding Speed, Mode=OneWayToSource}" KeyDown="txtSpeed_KeyDown"/>
         </StackPanel>
 
-        <StackPanel Grid.Row="1" Grid.Column="1" Margin="5">
+        <StackPanel Grid.Row="1" Grid.Column="1" Margin="5 2">
             <Label Name="lblTime" Content="Enter hours:"/>
-            <TextBox Name="txtTime" Text="{Binding Hours, Mode=OneWayToSource}"/>
+            <TextBox Name="txtTime" Text="{Binding Hours, Mode=OneWayToSource}" KeyDown="txtTime_KeyDown"/>
         </StackPanel>
 
         <ListBox Grid.Row="2" Grid.Column="1" Name="lbxDistance" ItemsSource="{Binding ListDist}" HorizontalContentAlignment="Stretch" Margin="5">
@@ -46,6 +47,9 @@
         </ListBox>
 
         <Button Grid.Row="3" Grid.Column="1" Name="btnCalculate" Content="Calculate" Margin="10" Click="btnCalculate_Click"/>
+
+        <Viewbox Grid.Row="4" Grid.Column="1" Margin="5">
+            <Label Name="lblMessage" Content="{Binding Message, Mode=OneWay}" Foreground="Red" FontWeight="Bold"/>
+        </Viewbox>
     </Grid>
-    <!--   </Viewbox> -->
 </Window>
