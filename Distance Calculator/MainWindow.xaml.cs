@@ -1,6 +1,12 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 
+/*
+ * COMMENTS:
+ * Use Enum to manage errors and show the message on the view side
+ * No message in the VM side
+ * 
+ */
 namespace Distance_Calculator
 {
     /// <summary>

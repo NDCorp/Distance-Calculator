@@ -133,7 +133,6 @@ namespace Distance_Calculator
         //Write content
         public void WriteFile()
         {
-            //string outputText = "";
             string location = System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string fileLocation = Path.Combine(location, FOLDER);
             Directory.CreateDirectory(fileLocation);
@@ -143,20 +142,20 @@ namespace Distance_Calculator
             //If empty, not error: write the distance
             if (string.IsNullOrEmpty(msgInfo))
             {
-                msgInfo = "\nSpeed\t\tTime and Distance\n" +
+                msgInfo = Environment.NewLine + "Speed\t\tTime and Distance" + Environment.NewLine +
                              "======\t=========================";
                 for (int i = 0; i < roadDist.Count; i++)
                 {
-                    msgInfo += "\n" + carSpeed.ToString() + "\t\t" + roadDist[i];
+                    msgInfo += Environment.NewLine + carSpeed.ToString() + "km\t\t" + roadDist[i];
                 }
-                msgInfo += "\n=================================";
+                msgInfo += Environment.NewLine  + "=================================";
             }
             else
             { 
                 ListDist = null;
-                msgInfo = "*************************************************\n" +
-                          msgInfo +
-                          "\n*************************************************";    //If not empty, error: get the message to write in the file
+                msgInfo = "*************************************************" + Environment.NewLine +
+                          msgInfo + Environment.NewLine +
+                          "*************************************************";    //If not empty, error: get the message to write in the file
             }
             File.WriteAllText(fullName, msgInfo);    //create/write the file if already exists
         }

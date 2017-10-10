@@ -23,7 +23,7 @@
         //Format how to return this data structure
         public override string ToString()
         {
-            return string.Concat(DistName, ": ", Distance.ToString());
+            return string.Concat(DistName, ": ", Distance.ToString(), "m");
         }
 
     }
